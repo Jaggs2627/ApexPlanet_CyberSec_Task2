@@ -1,4 +1,5 @@
-Part A: Passive Reconnaissance
+### Step 1: Reconnaissance 
+### Part A: Passive Reconnaissance
 Define and explain how a security analyst uses the following open-source intelligence (OSINT) tools without interacting with the target network:
 
 WHOIS Lookup: Explain that this queries public registries to find domain ownership, registration dates, name servers, and administrative contact emails.
@@ -9,9 +10,29 @@ Google Dorking: Provide examples of advanced search operators used to find leake
 
 Shodan: Explain that this is a search engine for internet-connected devices that gathers banner data from public-facing ports, mapping out vulnerable infrastructure without hitting them directly.
 
-Part B: Active Reconnaissance
+### Part B: Active Reconnaissance
 Explain the conceptual difference when you transition from passive gathering to active targeting:
 
 Ping Sweep: Document how an analyst sends ICMP Echo Request packets across an entire subnet range (e.g., 10.0.2.1 to 10.0.2.254) to see which host machines are online and responding.
 
 Banner Grabbing: Document how an analyst establishes a basic connection to an open port (like Port 21 or 80) to read the text string sent back by the service, exposing the exact software name and version number.
+
+---
+
+## Step 2: Port & Service Scanning Report
+
+### Target IP: 10.0.2.3
+### Detected OS: Linux 2.6.X (Ubuntu)
+
+| Port | Protocol | State | Service | Software Version |
+| :--- | :--- | :--- | :--- | :--- |
+| 21 | TCP | Open | ftp | vsftpd 2.3.4 |
+| 22 | TCP | Open | ssh | OpenSSH 4.7p1 Debian 8ubuntu1 |
+| 23 | TCP | Open | telnet | Linux telnetd |
+| 25 | TCP | Open | smtp | Postfix smtpd |
+| 80 | TCP | Open | http | Apache httpd 2.2.8 ((Ubuntu) DAV/2) |
+| 139 | TCP | Open | netbios-ssn | Samba smbd 3.X - 4.X |
+| 445 | TCP | Open | netbios-ssn | Samba smbd 3.X - 4.X |
+| 3306 | TCP | Open | mysql | MySQL 5.0.51a-3ubuntu5 |
+| 5432 | TCP | Open | postgresql | PostgreSQL DB 8.3.0 - 8.3.7 |
+| 8180 | TCP | Open | http | Apache Tomcat/Coyote JSP engine 1.1 |
