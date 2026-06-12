@@ -65,3 +65,5 @@ Using Nikto, an automated web application vulnerability scanner, a comprehensive
 * **Missing Security Headers (`X-Frame-Options`, `X-Content-Type-Options`)**
   * **Finding:** Missing modern defensive browser security configurations.
   * **Risk:** Leaves web clients exposed to Clickjacking attacks or MIME-sniffing exploits.
+
+---
