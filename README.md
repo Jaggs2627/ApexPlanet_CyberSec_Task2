@@ -36,3 +36,32 @@ Banner Grabbing: Document how an analyst establishes a basic connection to an op
 | 3306 | TCP | Open | mysql | MySQL 5.0.51a-3ubuntu5 |
 | 5432 | TCP | Open | postgresql | PostgreSQL DB 8.3.0 - 8.3.7 |
 | 8180 | TCP | Open | http | Apache Tomcat/Coyote JSP engine 1.1 |
+
+---
+
+## Step 3: Vulnerability Scanning & Risk Analysis
+
+Using Nikto, an automated web application vulnerability scanner, a comprehensive security audit was executed against the target web server on `http://10.0.2.3`. Below is the risk classification based on the enterprise severity matrix:
+
+### CRITICAL VULNERABILITIES
+* **Exposed Administrative Interfaces (/phpMyAdmin/)**
+  * **Finding:** The database management interface `phpMyAdmin` was discovered completely exposed without network restrictions.
+  * **Risk:** Attackers can attempt brute-force credential attacks directly against the root database administrator portal to compromise backend storage entirely.
+
+### HIGH VULNERABILITIES
+* **Directory Indexing / Browsable Folders (`/doc/`, `/test/`)**
+  * **Finding:** Directory indexing is globally enabled (e.g., `CVE-1999-0678`).
+  * **Risk:** Anyone can browse the raw folder architecture via their browser, exposing source code files, backups, or internal test configurations.
+
+### MEDIUM VULNERABILITIES
+* **Information Disclosure via Scripting (`/phpinfo.php`)**
+  * **Finding:** The active server configuration function `phpinfo()` is publicly accessible (`CWE-552`).
+  * **Risk:** This leaks crucial target intelligence including environmental variables, compilation paths, module versions, and underlying kernel architecture details.
+* **HTTP TRACE Method Enabled**
+  * **Finding:** The server replies to HTTP TRACE requests, indicating vulnerability to Cross-Site Tracing (XST).
+  * **Risk:** Can allow attackers to intercept and steal session tokens or sensitive cookies moving through client browsers.
+
+### LOW / INFORMATIONAL VULNERABILITIES
+* **Missing Security Headers (`X-Frame-Options`, `X-Content-Type-Options`)**
+  * **Finding:** Missing modern defensive browser security configurations.
+  * **Risk:** Leaves web clients exposed to Clickjacking attacks or MIME-sniffing exploits.
