@@ -85,3 +85,17 @@ A live packet capture was conducted on interface `eth0` to monitor unencrypted c
 * **Findings:** The filter isolated thousands of inbound connection requests where the SYN flag is raised but no corresponding Acknowledgment (ACK) packet exists. Because the source IPs were dynamically randomized/spoofed by our tool, the target server was forced to keep thousands of half-open TCP connections in its memory allocation tables, exhausting its system resources and preventing legitimate users from accessing the service.
 
 ---
+
+## Step 5: Firewall Basics with iptables
+
+To defend the target infrastructure against the active reconnaissance mapping and denial-of-service threats analyzed in previous steps, network-layer packet filtering was configured using the native Linux kernel utility `iptables`.
+
+### 1. Defensive Policy Implementation
+The following host-based packet filtering rules were appended to the `INPUT` chain:
+* **Rule 1 (HTTP Mitigation):** `sudo iptables -A INPUT -p tcp --dport 80 -j DROP`
+  * **Objective:** Drops all inbound TCP handshakes targeting the web server (Port 80/www). This effectively makes the web server invisible to automated version scans and drops malicious flood streams before processing.
+* **Rule 2 (Reconnaissance Mitigation):** `sudo iptables -A INPUT -p icmp --icmp-type echo-request -j DROP`
+  * **Objective:** Drops inbound ICMP Echo Requests. This prevents attackers from discovering whether the machine is active during an automated subnet network sweep.
+
+### 2. Active Policy Verification
+The rules table was verified using `sudo iptables -L -v`, confirming both defensive chains are actively monitoring the interfaces with empty hit counters, ready to discard unauthorized ingress packets.
