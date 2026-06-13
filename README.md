@@ -83,3 +83,5 @@ A live packet capture was conducted on interface `eth0` to monitor unencrypted c
 * **Analysis:** The network interface captured a massive influx of traffic (approx. 297,000+ packets). 
 * **Wireshark Filter Applied:** `tcp.flags.syn == 1 and tcp.flags.ack == 0`
 * **Findings:** The filter isolated thousands of inbound connection requests where the SYN flag is raised but no corresponding Acknowledgment (ACK) packet exists. Because the source IPs were dynamically randomized/spoofed by our tool, the target server was forced to keep thousands of half-open TCP connections in its memory allocation tables, exhausting its system resources and preventing legitimate users from accessing the service.
+
+---
