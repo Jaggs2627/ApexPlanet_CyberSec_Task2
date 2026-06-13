@@ -67,3 +67,19 @@ Using Nikto, an automated web application vulnerability scanner, a comprehensive
   * **Risk:** Leaves web clients exposed to Clickjacking attacks or MIME-sniffing exploits.
 
 ---
+
+## Step 4: Packet Analysis with Wireshark
+
+A live packet capture was conducted on interface `eth0` to monitor unencrypted credentials and analyze network-layer denial-of-service anomalies.
+
+### 1. Cleartext Credential Extraction (FTP Sniffing)
+* **Methodology:** An interactive session was established with the target system via standard FTP (`port 21`). 
+* **Analysis:** Because FTP is an unencrypted legacy protocol, all transmission occurs in cleartext. By filtering the packet stream for the `ftp` protocol, the authentication handshake was intercepted in plain text, exposing explicit user credentials:
+  * **Captured Username:** `msfadmin`
+  * **Captured Password:** `msfadmin`
+
+### 2. DDoS Simulation Analysis (SYN Flood Attack)
+* **Methodology:** A high-velocity synchronization flood was simulated against the target web server using `hping3` with the following flags: `sudo hping3 -S -p 80 --flood --rand-source`.
+* **Analysis:** The network interface captured a massive influx of traffic (approx. 297,000+ packets). 
+* **Wireshark Filter Applied:** `tcp.flags.syn == 1 and tcp.flags.ack == 0`
+* **Findings:** The filter isolated thousands of inbound connection requests where the SYN flag is raised but no corresponding Acknowledgment (ACK) packet exists. Because the source IPs were dynamically randomized/spoofed by our tool, the target server was forced to keep thousands of half-open TCP connections in its memory allocation tables, exhausting its system resources and preventing legitimate users from accessing the service.
